@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
-
+const Campaigns = require('./src/datasource/campaignMaster');
+const Engagement = require('./src/datasource/Engagement');
 const app = express();
-const port = 3000;
+const port = 5252;
 
 
 const pool = new Pool({
@@ -89,6 +90,80 @@ app.post('/api/validate-otp', async (req, res) => {
     res.status(500).json({ error: 'Failed to validate OTP' });
   }
 });
+function getCampaignById(id) {
+  return Campaigns.find(campaign => campaign.id === id);
+}
+app.get('/api/campaigns',async (req,res)=>{
+
+  var result = [
+    {id:1,
+      name:"AVC - Chef ki khoj",
+      details:"Apollo AVC's 'Chef Ki Khoj' seeks talented chefs to showcase their culinary skills in an exciting competition. Apply now!",
+      start_date:"2024-09-10 18:30:00",
+      end_date:"2024-09-25 18:30:00",
+      poster_url:"https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Poster/d5c50fd7-e352-4aa4-ab95-e101d9594be3.png",
+
+    },
+    {id:2,
+      name:"AVC - Talent ki khoj",
+      details:"Apollo AVC's 'Talent Ki Khoj' seeks talented chefs to showcase their culinary skills in an exciting competition. Apply now!",
+      start_date:"2024-09-10 18:30:00",
+      end_date:"2024-09-25 18:30:00",
+      poster_url:"https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Poster/image%20(4).png",
+      
+    },
+    {id:3,
+      name:"Wonder Woman contest",
+      details:"Apollo AVC's 'Wonder Woman contest' seeks talented chefs to showcase their culinary skills in an exciting competition. Apply now!",
+      start_date:"2024-09-10 18:30:00",
+      end_date:"2024-09-25 18:30:00",
+      poster_url:"https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Poster/image%20(5).png",
+      
+    },
+    {id:3,
+      name:"Wow - Chef ki khoj 2",
+      details:"Apollo AVC's 'Wow - Chef ki khoj 2' seeks talented chefs to showcase their culinary skills in an exciting competition. Apply now!",
+      start_date:"2024-09-10 18:30:00",
+      end_date:"2024-09-25 18:30:00",
+      poster_url:"https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Poster/image3.png",
+      
+    },
+    {id:3,
+      name:"Emerging Turks",
+      details:"Apollo AVC's 'Talent Ki Khoj' seeks talented chefs to showcase their culinary skills in an exciting competition. Apply now!",
+      start_date:"2024-09-10 18:30:00",
+      end_date:"2024-09-25 18:30:00",
+      poster_url:"https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Poster/image%20(6).png",
+      
+    },
+    {id:3,
+      name:"JAB FIT TAB HIT",
+      details:"Apollo AVC's 'JAB FIT TAB HIT' seeks talented chefs to showcase their culinary skills in an exciting competition. Apply now!",
+      start_date:"2024-09-10 18:30:00",
+      end_date:"2024-09-25 18:30:00",
+      poster_url:"https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Poster/image%20(7).png",
+      
+    }
+  ]
+
+return res.json(Campaigns)
+
+})
+
+app.post('/api/campaign_detail',async (req,res)=>{
+
+const {campaign_id} = req.body;
+const campaign = getCampaignById(campaign_id);
+
+return res.json(campaign)
+
+})
+
+app.get('/api/engagements',async (req,res)=>{
+  return res.json(Engagement)
+})
+
+
 
 // Start the server
 app.listen(port, () => {

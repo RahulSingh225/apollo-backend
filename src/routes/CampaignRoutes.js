@@ -65,7 +65,7 @@ var data = [];
     result.map(r=>{
       data.push({campaign_id:r.campaign_id,poster_url:`${FILE_URL}${r.campaign_poster_uuid}`})
     })
-    return res.json(result)
+    return res.json(data)
   }else{
     return res.json(campaignMaster)
 

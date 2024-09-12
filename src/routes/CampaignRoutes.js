@@ -61,6 +61,10 @@ campaignRoute.get('/campaigns',async (req,res)=>{
     ]
   const result = await dbService.executeQuery('SELECT * FROM public."tblCampaign"')
   if(result.length){
+var data = [];
+    result.map(r=>{
+      data.push({campaign_id:r.campaign_id,poster_url:`${FILE_URL}${r.campaign_poster_uuid}`})
+    })
     return res.json(result)
   }else{
     return res.json(campaignMaster)

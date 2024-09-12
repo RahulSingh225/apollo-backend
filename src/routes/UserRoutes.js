@@ -124,10 +124,18 @@ userRoute.post('/generate-otp', async (req, res) => {
 
   userRoute.post('/register-user', async (req, res) => {
    try {
+ 
+    const {
+      name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name, spouse_contact, spouse_birthday, number_of_children, children_1_name, children_1_dob, children_2_dob, address
+    } = req.body;
 
 
-    
-    
+
+    const result = dbService.executeQuery('INSERT INTO public."tblRegistration"( name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name, spouse_contact, spouse_birthday, number_of_children, children_1_name, children_1_dob, children_2_dob, address) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)',[
+      name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name, spouse_contact, spouse_birthday, number_of_children, children_1_name, children_1_dob, children_2_dob, address
+    ])
+    console.log(result);
+    return res.status(200).json({status:true,message:'Success'})
    } catch (error) {
     console.log(error);
     return res.status(500).json({status:false,message:'Internal Server error'})

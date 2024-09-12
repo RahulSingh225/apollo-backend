@@ -1,0 +1,1 @@
+module.exports = FILE_URL='https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Poster/'

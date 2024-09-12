@@ -2,13 +2,14 @@ const express  = require('express');
 const campaignMaster = require('../datasource/campaignMaster');
 const dbService = require('../services/dbService');
 const campaignRoute = express.Router()
+const FILE_URL =require('../services/Constants')
 
 function getCampaignById(id) {
     return Campaigns.find(campaign => campaign.id === id);
   }
 campaignRoute.get('/campaigns',async (req,res)=>{
 
-    var result = [
+    var data = [
       {id:1,
         name:"AVC - Chef ki khoj",
         details:"Apollo AVC's 'Chef Ki Khoj' seeks talented chefs to showcase their culinary skills in an exciting competition. Apply now!",
@@ -74,8 +75,49 @@ campaignRoute.get('/campaigns',async (req,res)=>{
     const {campaign_id} = req.body;
     const campaign = getCampaignById(campaign_id);
     const result = await dbService.executeQuery('SELECT cam.*,col.*,cre.* FROM public."tblCampaign" cam INNER JOIN public."tblCampaignCollateral" col ON cam.campaign_id = col.campaign_id INNER JOIN public."tblCreative" cre ON col.collateral_id = cre.campaign_collateral_id WHERE cam.campaign_id = $1',[campaign_id]);
+
+  
     if(result.length){
-        return res.json(result)
+      var campaginDetail = 
+
+      {id:1,
+        name:result[0].name,
+        details:result[0].details,
+        start_date:result[0].start_date,
+        end_date:result[0].end_date,
+        poster_url:FILE_URL+result[0].campaign_poster_uuid,
+        collaterals:[]
+  
+      
+    }
+
+
+    const data = {};
+
+    // Iterate over the data array
+    result.forEach(item => {
+        const { collateral_name, creative_uuid } = item;
+        
+        // Construct the URL for creative_uuid
+        const imageUrl = `${FILE_URL}${creative_uuid}`;
+        
+        // If the collateral_name does not exist, initialize it with an array
+        if (!data[collateral_name]) {
+          data[collateral_name] = [];
+        }
+        
+        // Push the imageUrl to the collateral_name array
+        data[collateral_name].push(imageUrl);
+    });
+    
+    // Convert the result object into an array of objects with the desired structure
+    const finalResult = Object.keys(data).map(key => ({ [key]: data[key] }));
+    
+    console.log(finalResult);
+
+    campaginDetail.collaterals=finalResult;
+      
+        return res.json(campaginDetail)
     }else{
 
         return res.json(campaign)

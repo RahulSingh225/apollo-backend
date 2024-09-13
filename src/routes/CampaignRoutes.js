@@ -2,7 +2,8 @@ const express  = require('express');
 const campaignMaster = require('../datasource/campaignMaster');
 const dbService = require('../services/dbService');
 const campaignRoute = express.Router()
-const FILE_URL =require('../services/Constants')
+const {FILE_URL} =require('../services/Constants')
+const {COLLATERAL_URL} = require('../services/Constants')
 
 function getCampaignById(id) {
     return Campaigns.find(campaign => campaign.id === id);
@@ -103,7 +104,7 @@ var data = [];
         const { collateral_name, creative_uuid } = item;
         
         // Construct the URL for creative_uuid
-        const imageUrl = `${FILE_URL}${creative_uuid}`;
+        const imageUrl = `${COLLATERAL_URL}${creative_uuid}`;
         
         // If the collateral_name does not exist, initialize it with an array
         if (!data[collateral_name]) {

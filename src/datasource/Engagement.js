@@ -47,7 +47,7 @@ module.exports = EnagagementMaster = [
   {
     id: 6,
     imageUrl:
-      "https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Collateral/Picture75.jpg",
+      "https://storage.googleapis.com/vguard_staging_bucket/apollo/appImages/Campaign/Collateral/Picture74.jpg",
     levels: ["PBC", "PBE+"],
     locked: false,
     status: "Unlocked",

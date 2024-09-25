@@ -1,6 +1,7 @@
 const express = require('express');
 const pool = require('../..');
-const dbService = require('../services/dbService')
+const dbService = require('../services/dbService');
+const moment = require('moment');
 
 const userRoute = express.Router();
 
@@ -126,14 +127,18 @@ userRoute.post('/generate-otp', async (req, res) => {
    try {
  
     const {
-      name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name, spouse_contact, spouse_birthday, number_of_children, children_1_name, children_1_dob, children_2_dob, address
+      name, mobile_number, wa_number, email, marital_status, doa, spouse_name, spouse_number, children_count, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob
     } = req.body;
+    
 
+    const count = await dbService.executeQuery('SELECT EXISTS (SELECT 1 FROM public."tblRegistration" WHERE mobile = $1 UNION ALL SELECT 1 FROM public."tblMember" WHERE mobile_number = $1 UNION ALL SELECT 1 FROM public."tblUser" WHERE mobile_number = $1) AS mobile_exists',[mobile_number])
+    console.log(count)
+if(count[0].mobile_exists){
+  return res.status(200).json({status:false,message:'Mobile number already registered'})
+}
 
-
-    const result = dbService.executeQuery('INSERT INTO public."tblRegistration"( name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name, spouse_contact, spouse_birthday, number_of_children, children_1_name, children_1_dob, children_2_dob, address) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)',[
-      name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name, spouse_contact, spouse_birthday, number_of_children, children_1_name, children_1_dob, children_2_dob, address
-    ])
+    const result = await dbService.executeQuery('INSERT INTO public."tblRegistration"( name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name,spouse_contact, number_of_children, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)',[
+      name, mobile_number, wa_number, email, marital_status, doa, spouse_name, spouse_number, children_count, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob])
     console.log(result);
     return res.status(200).json({status:true,message:'Success'})
    } catch (error) {
@@ -141,6 +146,19 @@ userRoute.post('/generate-otp', async (req, res) => {
     return res.status(500).json({status:false,message:'Internal Server error'})
    }
   })
+
+
+
+  userRoute.get('/pincodes',async (req,res)=>{
+
+    const result = await dbService.executeQuery('SELECT * FROM public."tblpinmaster"')
+console.log(result);
+return res.status(200).json(result)
+
+
+  })
+
+ 
 
 
 module.exports = userRoute

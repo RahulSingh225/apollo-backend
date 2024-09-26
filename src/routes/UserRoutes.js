@@ -66,7 +66,7 @@ userRoute.post('/generate-otp', async (req, res) => {
           const user = await dbService.executeQuery('SELECT * FROM public."tblMember" where mobile_number=$1',[mobile_number]);
           console.log(user)
   
-          res.json({ valid: true,data:user });
+          res.json({ valid: true,data:user[0] });
         } else {
           res.json({ valid: false, reason: 'OTP expired' });
         }
@@ -158,6 +158,21 @@ return res.status(200).json(result)
 
   })
 
+
+   userRoute.post('/areamanager',async (req,res)=>{
+    const {id} = req.body;
+    console.log(id)
+    const result = await dbService.executeQuery('SELECT * FROM public."tblareamanager" WHERE pin_id = $1',[id])
+console.log(result);
+if(result.length){
+
+
+return res.status(200).json(result[0])
+}else{
+  return res.status(400).json({status:false,message:'No area manager found'})
+}
+
+  })
  
 
 

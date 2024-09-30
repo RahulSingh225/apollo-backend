@@ -127,7 +127,7 @@ userRoute.post('/generate-otp', async (req, res) => {
    try {
  
     const {
-      name, mobile_number, wa_number, email, marital_status, doa, spouse_name, spouse_number, children_count, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob
+      name, mobile_number, wa_number, email, marital_status, doa, spouse_name, spouse_number, children_count, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob,spouse_dob
     } = req.body;
     
 
@@ -137,8 +137,8 @@ if(count[0].mobile_exists){
   return res.status(200).json({status:false,message:'Mobile number already registered'})
 }
 
-    const result = await dbService.executeQuery('INSERT INTO public."tblRegistration"( name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name,spouse_contact, number_of_children, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20)',[
-      name, mobile_number, wa_number, email, marital_status, doa, spouse_name, spouse_number, children_count, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob])
+    const result = await dbService.executeQuery('INSERT INTO public."tblRegistration"( name, mobile, whatsapp, email_id, marital_status, date_of_anniversary, spouse_name,spouse_contact, number_of_children, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob,spouse_birthday) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21)',[
+      name, mobile_number, wa_number, email, marital_status, doa, spouse_name, spouse_number, children_count, address,city,state,pincode,dealership_code,org_name,proprietor_name,gst_number,profile_firm,association_started,dob,spouse_dob])
     console.log(result);
     return res.status(200).json({status:true,message:'Success'})
    } catch (error) {
